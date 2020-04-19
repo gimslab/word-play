@@ -1,4 +1,4 @@
-package com.gimslab.wordplay
+package com.gimslab.wordplay.service
 
 data class Word(
 		val eng: String,

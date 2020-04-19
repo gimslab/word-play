@@ -1,4 +1,4 @@
-package com.gimslab.wordplay
+package com.gimslab.wordplay.web
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody
 class RootController {
 
 	@GetMapping("/")
-//	@ResponseBody
 	fun root(): String {
 		return "redirect:/word-play"
 	}

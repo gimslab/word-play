@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <style>
+    div.eng{
+      font-size:8em
+    }
+    div.kor{
+      font-size:6em
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+
+    function initDisplay(){
+      $("div.eng span").hide()
+      window.setTimeout(showHint, 1000)
+    };
+
+    function showHint(){
+      $("div.eng span.hint").show()
+      window.setTimeout(thinking, 1000)
+    };
+
+    var thikingTime = 0;
+    function thinking(){
+      $("div.eng span.hint").text(
+	$("div.eng span.hint").text()+".")
+      if(thikingTime++>2)
+      	showAnswer();
+      window.setTimeout(thinking, 1000)
+    }
+
+    function showAnswer(){
+      $("div.eng span.hint").hide()
+      $("div.eng span.answer").show()
+      window.setTimeout(goToNext, 3000)
+    };
+
+    function goToNext(){
+    	window.location.href="/word-play";
+    }
+
+    initDisplay();
+
+  } );
+  </script>
+</head>
+<body>
+  <div class="eng">
+    <span class="hint">h</span>
+    <span class="answer">happy</span>
+  </div>
+  <div class="kor">
+  행복한
+  </div>
+</body>
+</html>

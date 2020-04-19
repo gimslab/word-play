@@ -6,12 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
-@RequestMapping("/hello")
-class HelloController {
+class RootController {
 
-	@GetMapping
+	@GetMapping("/")
+//	@ResponseBody
+	fun root(): String {
+		return "redirect:/word-play"
+	}
+
+	@GetMapping("/hello")
 	@ResponseBody
 	fun hello(): String {
-		return "hello 4/19 14:00"
+		return "Hello Word Play"
 	}
 }

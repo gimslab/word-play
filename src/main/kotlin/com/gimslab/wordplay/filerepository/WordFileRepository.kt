@@ -1,5 +1,9 @@
-package com.gimslab.wordplay.service
+package com.gimslab.wordplay.filerepository
 
+import com.gimslab.wordplay.filerepository.FileBasedRepository.Companion.DATA_DIRNAME
+import com.gimslab.wordplay.filerepository.FileBasedRepository.Companion.FIELD_DELIMITER
+import com.gimslab.wordplay.service.wordplay.Word
+import com.gimslab.wordplay.service.wordplay.WordRepository
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Repository
@@ -12,17 +16,17 @@ import kotlin.random.Random
 
 @Repository
 @EnableScheduling
-class WordRepository(
+class WordFileRepository(
 		private var words: List<Word>
-) {
+) : WordRepository {
+
 	init {
 		loadFromFile()
 	}
 
 	@Scheduled(fixedDelay = 1 * 60 * 1000)
 	private fun loadFromFile() {
-//		val file = File("data/wordbook-sample.tsv")
-		val file = File("data/wordbook-level1.tsv")
+		val file = File(DATA_DIRNAME, "wordbook-level1.tsv")
 		println("+++ ${ZonedDateTime.now()} loading file: $file ${file.exists()}")
 
 		val newWords = mutableListOf<Word>()
@@ -32,21 +36,20 @@ class WordRepository(
 				val line = br.readLine()
 				if (line.isNullOrBlank())
 					break
-				val st = StringTokenizer(line, "\t")
+				val st = StringTokenizer(line, FIELD_DELIMITER)
 				if (st.countTokens() < 2) {
 					println("ERROR parsing line: $line")
 					continue
 				}
 				val eng = st.nextToken()
 				val kor = st.nextToken()
-//				println("+++ $eng ::: $kor")
 				newWords.add(Word(eng, kor))
 			} while (line.isNotBlank())
 		}
 		words = newWords
 	}
 
-	fun findRandomWord(): Word {
+	override fun findRandomWord(): Word {
 		val idx = Random(System.currentTimeMillis()).nextInt(words.size)
 		return words[idx]
 	}

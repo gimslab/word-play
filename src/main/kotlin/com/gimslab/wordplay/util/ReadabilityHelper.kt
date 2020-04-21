@@ -1,4 +1,4 @@
-package com.gimslab.wordplay.service
+package com.gimslab.wordplay.util
 
 class ReadabilityHelper {
 	companion object {

@@ -11,7 +11,8 @@
     div.kor{
       font-size:6em
     }
-  </style>
+
+    </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
@@ -49,7 +50,8 @@
     initDisplay();
 
   } );
-  </script>
+
+    </script>
 </head>
 <body>
 <div class="eng">
@@ -58,7 +60,9 @@
 </div>
 <div th:text="${{kor}}" class="kor">행복한</div>
 <div>
-    <a href="/signin">SIGN IN</a>
+    <span th:unless="${userSignedIn}"><a href="/signIn">SIGN IN</a></span>
+    <span th:text="${{userId}}">userId</span>
+    <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
 </div>
 </body>
 </html>

@@ -17,6 +17,7 @@ class SignInController(
 ) {
 
 	companion object {
+		val REGEX_FOR_USERID = Regex("[^a-z]")
 	}
 
 	@GetMapping
@@ -28,9 +29,16 @@ class SignInController(
 	@PostMapping
 	fun signInPost(userId: String, req: HttpServletRequest, resp: HttpServletResponse)
 			: String {
+		validate(userId)
 		signInService.signIn(userId)
 		userSessionManager.makeUserSession(userId, req, resp)
 		return "redirect:/word-play"
+	}
+
+	private fun validate(userId: String) {
+		val lowers = userId.replace(REGEX_FOR_USERID, "")
+		if (userId != lowers)
+			throw IllegalArgumentException("영문 소문자만 가능합니다.")
 	}
 }
 

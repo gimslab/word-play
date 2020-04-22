@@ -25,6 +25,7 @@ class WordPlayController(
 		userSessionManager.makeSessionFromCookie(req, resp)
 
 		val word = findNextWord()
+
 		val mnv = ModelAndView("main")
 		mnv.setWord(word)
 		mnv.addObject("userSignedIn", userSessionManager.userSignedIn(req))

@@ -6,6 +6,7 @@ import com.gimslab.wordplay.service.wordplay.Word
 import com.gimslab.wordplay.service.wordplay.WordRepository
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import java.io.BufferedReader
 import java.io.File
@@ -14,7 +15,7 @@ import java.time.ZonedDateTime
 import java.util.*
 import kotlin.random.Random
 
-@Repository
+@Component
 @EnableScheduling
 class WordFileRepository(
 		private var words: List<Word>

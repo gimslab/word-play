@@ -17,11 +17,16 @@
     <script>
   $( function() {
   } );
+
+  function validateUserId(){
+    var x = $("input[name='userId']").val()
+    $("input[name='userId']").val(x.replace(/[^a-z]/g,""))
+  }
   </script>
 </head>
 <body>
 <form method="post">
-ID: <input type="text" name="userId"/> (알파벳 소문자만 가능)
+ID: <input type="text" name="userId" onkeyup="validateUserId()" onblur="validateUserId()"/> (알파벳 소문자만 가능)
 <input type="submit" value="SIGN IN"/>
 </form>
 </body>

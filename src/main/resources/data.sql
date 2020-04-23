@@ -3,10 +3,10 @@
 create table if not exists user_word (
 	id bigint not null AUTO_INCREMENT,
 	userId varchar(255),
-	wordEng varchar(255),
-	experience int,
+	word varchar(255),
+	proficiency int,
 	primary key(id),
-	key user_word_idx01(userId, wordEng)
+	key user_word_idx01(userId, word)
 );
 
 --insert into member (name, age) values

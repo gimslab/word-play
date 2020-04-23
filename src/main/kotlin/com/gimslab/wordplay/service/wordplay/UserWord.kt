@@ -10,9 +10,13 @@ class UserWord(
 		var id: Long?,
 
 		val userId: String,
-		val wordEng: String,
-		var experience: Int?
+		val word: String,
+		var proficiency: Int
 ) {
-	constructor(userId: String, wordEng: String) : this(0, userId, wordEng, 0)
+	fun increaseProficiency() {
+		proficiency++
+	}
+
+	constructor(userId: String, word: String) : this(0, userId, word, 1)
 }
 

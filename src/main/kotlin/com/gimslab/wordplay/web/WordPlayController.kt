@@ -3,6 +3,7 @@ package com.gimslab.wordplay.web
 import com.gimslab.wordplay.service.wordplay.UserWord
 import com.gimslab.wordplay.service.wordplay.Word
 import com.gimslab.wordplay.service.wordplay.WordService
+import com.gimslab.wordplay.util.ReadabilityHelper.Companion.not
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,8 +18,6 @@ class WordPlayController(
 		private val wordService: WordService,
 		private val userSessionManager: UserSessionManager
 ) {
-	companion object {
-	}
 
 	@GetMapping
 	fun play(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
@@ -33,12 +32,15 @@ class WordPlayController(
 		mnv.setWord(word)
 		mnv.addObject("userSignedIn", userSessionManager.userSignedIn(req))
 		mnv.addObject("userId", userSessionManager.currentUserId(req))
-		mnv.addObject("proficiency", userWord?.proficiency ?: 0)
+		if (signedInStatus(req))
+			mnv.addObject("proficiency", userWord?.proficiency ?: 0)
 		return mnv
 	}
 
 	@PostMapping
 	fun post(gotWord: String, req: HttpServletRequest): String {
+		if (not(signedInStatus(req)))
+			return "redirect:/signin"
 		increaseProficiency(gotWord, req)
 		return "redirect:/word-play"
 	}
@@ -60,6 +62,8 @@ class WordPlayController(
 		if (userId != null)
 			wordService.increaseProficiency(userId, gotWord)
 	}
+
+	private fun signedInStatus(req: HttpServletRequest) = userSessionManager.currentUserId(req) != null
 }
 
 private fun ModelAndView.setWord(word: Word) {

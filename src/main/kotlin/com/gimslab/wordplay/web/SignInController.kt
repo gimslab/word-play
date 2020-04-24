@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Controller
-@RequestMapping("/signIn")
+@RequestMapping("/signin")
 class SignInController(
 		private val signInService: SignInService,
 		private val userSessionManager: UserSessionManager
@@ -22,7 +22,7 @@ class SignInController(
 
 	@GetMapping
 	fun signIn(): ModelAndView {
-		val mnv = ModelAndView("signIn")
+		val mnv = ModelAndView("signin")
 		return mnv
 	}
 

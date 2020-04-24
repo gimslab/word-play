@@ -5,11 +5,14 @@
     <meta charset="utf-8">
     <title>Word Play</title>
     <style>
-    div.eng{
-      font-size:8em
+	body {
+      font-size: 2em;
+	}
+    button {
+      font-size: 1.8em;
     }
-    div.kor{
-      font-size:6em
+    input {
+      font-size: 1.8em;
     }
   </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -26,7 +29,10 @@
 </head>
 <body>
 <form method="post">
-ID: <input type="text" name="userId" onkeyup="validateUserId()" onblur="validateUserId()"/> (알파벳 소문자만 가능)
+	<span>ID: *알파벳 소문자만 가능</span>
+	<span>
+		<input type="text" name="userId" onkeyup="validateUserId()" onblur="validateUserId()"/>
+	</span>
 <input type="submit" value="SIGN IN"/>
 </form>
 </body>

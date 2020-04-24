@@ -6,8 +6,13 @@
 <meta charset="utf-8">
 <title>Word Play</title>
 <style>
-    div.top-button-bar {
+	body {
+      font-size: 2em;
+	}
+    button {
       font-size: 1.8em;
+    }
+    div.top-button-bar {
       text-align: right;
     }
     div.eng{
@@ -18,9 +23,6 @@
     }
     div.bottom-button-bar {
       text-align: justify;
-    }
-    div.bottom-button-bar button {
-      font-size: 1.8em;
     }
 
 </style>
@@ -88,7 +90,7 @@ function gotItButtonClicked(){
 </head>
 <body>
 <div class="top-button-bar">
-    <span th:unless="${userSignedIn}"><a href="/signIn">SIGN IN</a></span>
+    <span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
     <span th:text="${{userId}}">userId</span>
     <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
 </div>

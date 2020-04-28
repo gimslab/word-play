@@ -1,15 +1,18 @@
 package com.gimslab.wordplay.service.wordplay
 
+import com.gimslab.wordplay.service.wordbook.WordBookRepository
 import org.springframework.stereotype.Service
 
 @Service
 class WordService(
 		val wordRepository: WordRepository,
+		val wordBookRepository: WordBookRepository,
 		val userWordRepository: UserWordRepository
 ) {
 
-	fun findNextWord(): Word {
-		return wordRepository.findRandomWord()
+	fun findNextWord(wordBookId: Long): Word {
+		val wordBook = wordBookRepository.getOne(wordBookId)
+		return wordRepository.findRandomWord(wordBook.filename)
 	}
 
 	fun increaseProficiency(userId: String, word: String) {

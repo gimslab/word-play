@@ -4,6 +4,7 @@ import com.gimslab.wordplay.service.wordplay.UserWord
 import com.gimslab.wordplay.service.wordplay.Word
 import com.gimslab.wordplay.service.wordplay.WordService
 import com.gimslab.wordplay.util.ReadabilityHelper.Companion.not
+import com.gimslab.wordplay.web.UserInfoControllerCommon.Companion.setUserInfo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,18 +21,18 @@ class WordPlayController(
 ) {
 
 	@GetMapping
-	fun play(req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
+	fun play(wordBookId: Long, req: HttpServletRequest, resp: HttpServletResponse): ModelAndView {
 
 		// TODO move to interceptor
 		userSessionManager.makeSessionFromCookie(req, resp)
 
-		val word = findNextWord()
+		val word = findNextWord(wordBookId)
 		val userWord = findUserWord(word, req)
 
 		val mnv = ModelAndView("main")
+		setUserInfo(req, userSessionManager, mnv)
+		mnv.addObject("wordBookId", wordBookId)
 		mnv.setWord(word)
-		mnv.addObject("userSignedIn", userSessionManager.userSignedIn(req))
-		mnv.addObject("userId", userSessionManager.currentUserId(req))
 		if (signedInStatus(req))
 			mnv.addObject("proficiency", userWord?.proficiency ?: 0)
 		return mnv
@@ -45,8 +46,8 @@ class WordPlayController(
 		return "redirect:/word-play"
 	}
 
-	private fun findNextWord(): Word {
-		return wordService.findNextWord()
+	private fun findNextWord(wordBookId: Long): Word {
+		return wordService.findNextWord(wordBookId)
 	}
 
 	private fun findUserWord(word: Word, req: HttpServletRequest): UserWord? {

@@ -13,3 +13,11 @@ create table if not exists user_word (
 --  ('Aliko', 11),
 --  ('Bill', 22),
 --  ('Folrunsho', 33);
+
+create table if not exists word_book (
+	id bigint not null AUTO_INCREMENT,
+	title varchar(255),
+	filename varchar(255),
+	createdTime timestamp,
+	primary key(id)
+)

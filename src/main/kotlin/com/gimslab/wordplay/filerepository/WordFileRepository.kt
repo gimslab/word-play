@@ -7,7 +7,6 @@ import com.gimslab.wordplay.service.wordplay.WordRepository
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -18,16 +17,18 @@ import kotlin.random.Random
 @Component
 @EnableScheduling
 class WordFileRepository(
+		private var filename: String?,
 		private var words: List<Word>
 ) : WordRepository {
 
 	init {
+		filename = "wordbook-level1.tsv"
 		loadFromFile()
 	}
 
 	@Scheduled(fixedDelay = 1 * 60 * 1000)
 	private fun loadFromFile() {
-		val file = File(DATA_DIRNAME, "wordbook-level1.tsv")
+		val file = File(DATA_DIRNAME, filename)
 		println("+++ ${ZonedDateTime.now()} loading file: $file ${file.exists()}")
 
 		val newWords = mutableListOf<Word>()
@@ -47,10 +48,14 @@ class WordFileRepository(
 				newWords.add(Word(eng, kor))
 			} while (line.isNotBlank())
 		}
-		words = newWords
+		this.words = newWords
 	}
 
-	override fun findRandomWord(): Word {
+	override fun findRandomWord(filename: String): Word {
+		if (filename != this.filename) {
+			this.filename = filename
+			loadFromFile()
+		}
 		val idx = Random(System.currentTimeMillis()).nextInt(words.size)
 		return words[idx]
 	}

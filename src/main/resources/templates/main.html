@@ -6,31 +6,28 @@
 <meta charset="utf-8">
 <title>Word Play</title>
 <style>
-	body {
-      font-size: 2em;
-	}
     button {
-      font-size: 1.8em;
+      font-size: 1.2em;
     }
-    div.top-button-bar {
-      text-align: right;
+    .pause {
+        display: none;
     }
     div.eng{
-      font-size:8em
+      font-size:4em
     }
     div.kor{
-      font-size:6em
-    }
-    div.bottom-button-bar {
-      text-align: justify;
+      font-size:2em
     }
 
 </style>
 
+<link rel="stylesheet" type="text/css" href="/default.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
+
+var wordBookId = [[${wordBookId}]];
 
 $( function() {
 
@@ -46,24 +43,20 @@ $( function() {
     };
 
     var thikingTime = 0;
-    function thinking(){
-      $("div.eng span.hint").text(
-    $("div.eng span.hint").text()+".")
-      if(thikingTime++>2)
-        showAnswer();
-      window.setTimeout(thinking, 1000)
-    }
+	function thinking(){
+		$("div.eng span.hint").text(
+			$("div.eng span.hint").text()+".")
+		if( thikingTime++ > 2 )
+			showAnswer();
+		else
+			window.setTimeout(thinking, 1000)
+	}
 
-    function showAnswer(){
-      $("div.eng span.hint").hide()
-      $(".answer").show()
-      window.setTimeout(goToNext, 3000)
-    };
-
-    function goToNext(){
-        if(doGoNext)
-            window.location.href="/word-play";
-    }
+	function showAnswer(){
+		$("div.eng span.hint").hide()
+		$(".answer").show()
+		window.setTimeout(goToNext, 3000)
+	};
 
     initDisplay();
 
@@ -71,12 +64,19 @@ $( function() {
 
 var doGoNext = true;
 
+function goToNext(){
+	if(doGoNext)
+		window.location.href="/word-play?wordBookId="+wordBookId;
+}
+
 function pauseButtonClicked(){
 	if(doGoNext){
 		doGoNext = false;
-		$("button.pause").text("GO")
+		$("button#pauseButton").text("CONTINUE")
+		$(".pause").show()
 	} else {
 		doGoNext = true;
+		$(".pause").hide()
 		goToNext();
 	}
 }
@@ -94,25 +94,31 @@ function gotItButtonClicked(){
     <span th:text="${{userId}}">userId</span>
     <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
 </div>
-<div class="eng">
-    <span th:text="${{hint}}" class="hint">h</span>
-    <span th:text="${{eng}}" class="answer">happy</span>
+<div class="body">
+	<div class="eng">
+		<span th:text="${{hint}}" class="hint">h</span>
+		<span th:text="${{eng}}" class="answer">happy</span>
+	</div>
+	<div th:text="${{kor}}" class="kor">행복한</div>
+	<div class="bottom-button-bar">
+		<table width="100%">
+			<tr>
+				<td style="text-align: left">
+					<span>Proficiency: </span>
+					<span th:text="${proficiency}">Proficiency: 99</span>
+					<span class="pause"><a href="/word-books">다른 단어장</a></span>
+				</td>
+				<td style="text-align: right">
+					<button id="pauseButton" onclick="pauseButtonClicked()">PAUSE</button>
+					<button class="gotit" onclick="gotItButtonClicked()">GOT IT</button>
+				</td>
+			</tr>
+		</table>
+	</div>
 </div>
-<div th:text="${{kor}}" class="kor">행복한</div>
-<div class="bottom-button-bar">
-	<table width="100%">
-		<tr>
-			<td style="text-align: left">
-				<span>Proficiency: </span>
-				<span th:text="${proficiency}">Proficiency: 99</span>
-			</td>
-			<td style="text-align: right">
-				<button class="pause" onclick="pauseButtonClicked()">PAUSE</button>
-				<button class="gotit" onclick="gotItButtonClicked()">GOT IT</button>
-			</td>
-		</tr>
-	</table>
-</div>
-<form id="gotit" method="post"><input type="hidden" name="gotWord" th:value="${eng}"/></form>
+<form id="gotit" method="post">
+	<input type="hidden" name="wordBookId" th:value="${wordBookId}"/>
+	<input type="hidden" name="gotWord" th:value="${eng}"/>
+</form>
 </body>
 </html>

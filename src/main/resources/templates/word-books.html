@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+
+<meta charset="utf-8">
+<title>word books - Word Play</title>
+<style>
+
+</style>
+
+<link rel="stylesheet" type="text/css" href="/default.css" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+
+$( function() {
+
+} );
+
+</script>
+</head>
+<body>
+<div class="top-button-bar">
+    <span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
+    <span th:text="${{userId}}">userId</span>
+    <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
+</div>
+
+<div class="body">
+	<table width="100%">
+		<thead>
+		<tr>
+			<th>&nbsp;</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="wordBook: ${wordBooks}">
+			<td>
+				<a th:href="@{/word-play(wordBookId=${wordBook.id})}"><span th:text="${wordBook.title}"></span></a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="bottom-button-bar">
+</div>
+
+</body>
+</html>

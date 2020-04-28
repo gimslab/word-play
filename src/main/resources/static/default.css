@@ -1,0 +1,12 @@
+body {
+	font-size: 4em;
+	text-align: center;
+}
+
+div.top-button-bar {
+	text-align: right;
+}
+
+div.bottom-button-bar {
+	text-align: justify;
+}

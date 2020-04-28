@@ -10,7 +10,7 @@ class RootController {
 
 	@GetMapping("/")
 	fun root(): String {
-		return "redirect:/word-play"
+		return "redirect:/word-books"
 	}
 
 	@GetMapping("/hello")

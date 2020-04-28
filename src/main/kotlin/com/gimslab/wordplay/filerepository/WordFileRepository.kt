@@ -29,7 +29,7 @@ class WordFileRepository(
 	@Scheduled(fixedDelay = 1 * 60 * 1000)
 	private fun loadFromFile() {
 		val file = File(DATA_DIRNAME, filename)
-		println("+++ ${ZonedDateTime.now()} loading file: $file ${file.exists()}")
+		println("+++ ${ZonedDateTime.now()} loading file: $file ${file.exists()} ${file.canonicalPath}")
 
 		val newWords = mutableListOf<Word>()
 		val br = BufferedReader(FileReader(file))

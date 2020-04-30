@@ -1,14 +1,20 @@
 package com.gimslab.wordplay.service.signin
 
 import java.time.ZonedDateTime
+import javax.persistence.*
 
-data class User(
-		val userId: String,
-		val registeredAt: ZonedDateTime
+@Table(name = "user")
+@Entity
+class User(
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
+		var id: Long?,
+		val signId: String,
+		val createdTime: ZonedDateTime
 ) {
 	companion object {
-		fun of(userId: String): User {
-			return User(userId, ZonedDateTime.now())
+		fun of(signId: String): User {
+			return User(null, signId, ZonedDateTime.now())
 		}
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import java.lang.RuntimeException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -27,17 +28,19 @@ class SignInController(
 	}
 
 	@PostMapping
-	fun signInPost(userId: String, req: HttpServletRequest, resp: HttpServletResponse)
+	fun signInPost(signId: String, req: HttpServletRequest, resp: HttpServletResponse)
 			: String {
-		validate(userId)
-		signInService.signIn(userId)
-		userSessionManager.makeUserSession(userId, req, resp)
-		return "redirect:/word-play"
+		validate(signId)
+		val user = signInService.signIn(signId)
+		if (user == null)
+			throw RuntimeException("login fail")
+		userSessionManager.makeUserSession(user.id!!, req, resp)
+		return "redirect:/word-books"
 	}
 
-	private fun validate(userId: String) {
-		val lowers = userId.replace(REGEX_FOR_USERID, "")
-		if (userId != lowers)
+	private fun validate(signId: String) {
+		val lowers = signId.replace(REGEX_FOR_USERID, "")
+		if (signId != lowers)
 			throw IllegalArgumentException("영문 소문자만 가능합니다.")
 	}
 }

@@ -9,14 +9,16 @@ class UserWord(
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		var id: Long?,
 
-		val userId: String,
-		val word: String,
+		val userId: Long,
+		val wordBookId: Long,
+		val wordId: Long,
 		var proficiency: Int
 ) {
 	fun increaseProficiency() {
 		proficiency++
 	}
 
-	constructor(userId: String, word: String) : this(0, userId, word, 1)
+	constructor(userId: Long, wordBookId: Long, wordId: Long) :
+			this(id = 0, userId = userId, wordBookId = wordBookId, wordId = wordId, proficiency = 0)
 }
 

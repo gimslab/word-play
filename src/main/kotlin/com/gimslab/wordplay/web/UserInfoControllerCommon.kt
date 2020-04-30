@@ -7,7 +7,7 @@ class UserInfoControllerCommon {
 	companion object {
 		fun setUserInfo(req: HttpServletRequest, userSessionManager: UserSessionManager, mnv: ModelAndView) {
 			mnv.addObject("userSignedIn", userSessionManager.userSignedIn(req))
-			mnv.addObject("userId", userSessionManager.currentUserId(req))
+			mnv.addObject("userSignId", userSessionManager.currentUserSignId(req))
 		}
 	}
 }

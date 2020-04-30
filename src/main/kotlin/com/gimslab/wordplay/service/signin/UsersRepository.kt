@@ -1,6 +1,7 @@
 package com.gimslab.wordplay.service.signin
 
 interface UsersRepository {
-	fun findById(userId: String): User?
-	fun addUser(user: User)
+	fun getOne(userId: Long): User
+	fun save(user: User): User
+	fun findBySignId(signId: String): User?
 }

@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service
 class SignInService(
 		private val usersRepository: UsersRepository
 ) {
-	fun signIn(userId: String) {
-		val user = usersRepository.findById(userId)
-		if (user == null)
-			usersRepository.addUser(User.of(userId))
+	fun signIn(signId: String): User? {
+		val user = usersRepository.findBySignId(signId)
+		if (user != null)
+			return user
+		return usersRepository.save(User.of(signId))
 
 	}
 }

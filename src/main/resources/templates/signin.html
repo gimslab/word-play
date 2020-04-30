@@ -22,8 +22,8 @@
   } );
 
   function validateUserId(){
-    var x = $("input[name='userId']").val()
-    $("input[name='userId']").val(x.replace(/[^a-z]/g,""))
+    var x = $("input[name='signId']").val()
+    $("input[name='signId']").val(x.replace(/[^a-z]/g,""))
   }
   </script>
 </head>
@@ -31,7 +31,7 @@
 <form method="post">
 	<span>ID: *알파벳 소문자만 가능</span>
 	<span>
-		<input type="text" name="userId" onkeyup="validateUserId()" onblur="validateUserId()"/>
+		<input type="text" name="signId" onkeyup="validateUserId()" onblur="validateUserId()"/>
 	</span>
 <input type="submit" value="SIGN IN"/>
 </form>

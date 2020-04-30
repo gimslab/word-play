@@ -1,6 +1,8 @@
 package com.gimslab.wordplay.service.wordplay
 
 interface WordRepository {
-	fun findRandomWord(filename: String): Word
+	fun findByWordBookId(wordBookId: Long): List<Word>
+	fun save(word: Word): Word
+	fun save(words: List<Word>): List<Word>
 }
 

@@ -91,7 +91,7 @@ function gotItButtonClicked(){
 <body>
 <div class="top-button-bar">
     <span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
-    <span th:text="${{userId}}">userId</span>
+    <span th:text="${{userSignId}}">userSignId</span>
     <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
 </div>
 <div class="body">

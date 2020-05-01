@@ -1,5 +1,6 @@
 package com.gimslab.wordplay.web
 
+import com.gimslab.wordplay.service.userwordbook.UserWordService
 import com.gimslab.wordplay.service.wordplay.UserWord
 import com.gimslab.wordplay.service.wordplay.UserWordRepository
 import com.gimslab.wordplay.service.wordplay.Word
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 class WordPlayController(
 		private val wordService: WordService,
 		private val userSessionManager: UserSessionManager,
-		private val userWordRepository: UserWordRepository
+		private val userWordService: UserWordService
 ) {
 
 	@GetMapping
@@ -28,8 +29,8 @@ class WordPlayController(
 		// TODO move to interceptor
 		userSessionManager.makeSessionFromCookie(req, resp)
 
-		val word = findNextWord(wordBookId)
-		val userWord = findUserWord(word.id!!, wordBookId, req)
+		val userWord = findNextUserWord(wordBookId, req)
+		val word = findWord(userWord?.wordId, wordBookId)
 
 		val mnv = ModelAndView("main")
 		setUserInfo(req, userSessionManager, mnv)
@@ -45,19 +46,22 @@ class WordPlayController(
 		if (not(signedInStatus(req)))
 			return "redirect:/signin"
 		increaseProficiency(wordId, wordBookId, req)
-		return "redirect:/word-play"
+		return "redirect:/word-play?wordBookId=$wordBookId"
 	}
 
-	private fun findNextWord(wordBookId: Long): Word {
-		return wordService.findNextWord(wordBookId)
-	}
-
-	private fun findUserWord(wordId: Long, wordBookId: Long, req: HttpServletRequest): UserWord? {
+	private fun findNextUserWord(wordBookId: Long, req: HttpServletRequest): UserWord? {
 		val userId = userSessionManager.currentUserId(req)
-		return if (userId != null)
-			userWordRepository.findByUserIdAndWordBookIdAndWordId(userId, wordBookId, wordId)
+		return userWordService.findNextUserWord(userId, wordBookId)
+	}
+
+	private fun findWord(wordId: Long?, wordBookId: Long): Word {
+		if (wordId == null)
+			return Word(wordBookId, "error", "오류")
+		val word = wordService.findWordById(wordId)
+		return if (word != null)
+			word
 		else
-			null
+			Word(wordBookId, "error", "오류")
 	}
 
 	private fun increaseProficiency(wordId: Long, wordBookId: Long, req: HttpServletRequest) {
@@ -70,6 +74,7 @@ class WordPlayController(
 }
 
 private fun ModelAndView.setWord(word: Word) {
+	this.addObject("wordId", word.id)
 	this.addObject("eng", word.eng)
 	this.addObject("hint", word.getHint())
 	this.addObject("kor", word.kor)

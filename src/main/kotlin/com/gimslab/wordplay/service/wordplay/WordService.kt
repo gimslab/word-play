@@ -9,13 +9,6 @@ class WordService(
 		val wordBookRepository: WordBookRepository,
 		val userWordRepository: UserWordRepository
 ) {
-
-	fun findNextWord(wordBookId: Long): Word {
-		val wordBook = wordBookRepository.getOne(wordBookId)
-//		return wordsRepository.findRandomWord(wordBook.filename)
-		return Word(0, 0, "abc", "가나다")
-	}
-
 	fun increaseProficiency(userId: Long, wordBookId: Long, wordId: Long) {
 		var userWord = userWordRepository.findByUserIdAndWordId(userId, wordId)
 		if (userWord != null)
@@ -25,5 +18,6 @@ class WordService(
 		userWordRepository.save(userWord)
 	}
 
-	fun findBy(userId: Long, wordId: Long) = userWordRepository.findByUserIdAndWordId(userId, wordId)
+	fun findWordById(wordId: Long) =
+			wordRepository.getOne(wordId)
 }

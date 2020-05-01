@@ -2,36 +2,33 @@
 <!--suppress XmlUnboundNsPrefix -->
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>Word Play</title>
-    <style>
-	body {
-      font-size: 2em;
+<meta charset="utf-8">
+<title>Word Play</title>
+<style>
+	input {
+	  font-size: 1em;
+	  height: 2em;
 	}
-    button {
-      font-size: 1.8em;
-    }
-    input {
-      font-size: 1.8em;
-    }
-  </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-  $( function() {
-  } );
-
+	input.sign-id {
+	  width: 10em;
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
   function validateUserId(){
     var x = $("input[name='signId']").val()
-    $("input[name='signId']").val(x.replace(/[^a-z]/g,""))
+    var fixed = x.replace(/[^a-zA-Z]/g,"").toLowerCase()
+    $("input[name='signId']").val(fixed)
   }
-  </script>
+</script>
 </head>
 <body>
 <form method="post">
-	<span>ID: *알파벳 소문자만 가능</span>
+	<span>USER ID: *알파벳 소문자만 가능</span>
 	<span>
-		<input type="text" name="signId" onkeyup="validateUserId()" onblur="validateUserId()"/>
+		<input type="text" name="signId" class="sign-id" onkeyup="validateUserId()" onblur="validateUserId()"/>
 	</span>
 <input type="submit" value="SIGN IN"/>
 </form>

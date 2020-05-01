@@ -15,7 +15,7 @@ class SignOutController(
 	@GetMapping
 	fun signOut(req: HttpServletRequest, resp: HttpServletResponse): String {
 		userSessionManager.removeUserSession(req, resp)
-		return "redirect:/word-play"
+		return "redirect:/word-books"
 	}
 }
 

@@ -2,8 +2,6 @@ package com.gimslab.wordplay.web
 
 import com.gimslab.wordplay.service.userwordbook.UserWordService
 import com.gimslab.wordplay.service.wordplay.UserWord
-import com.gimslab.wordplay.service.wordplay.UserWordRepository
-import com.gimslab.wordplay.service.wordplay.Word
 import com.gimslab.wordplay.service.wordplay.WordService
 import com.gimslab.wordplay.util.ReadabilityHelper.Companion.not
 import com.gimslab.wordplay.web.UserInfoControllerCommon.Companion.setUserInfo
@@ -35,7 +33,8 @@ class WordPlayController(
 		val mnv = ModelAndView("main")
 		setUserInfo(req, userSessionManager, mnv)
 		mnv.addObject("wordBookId", wordBookId)
-		mnv.setWord(word)
+//		mnv.setWord(word)
+		mnv.addObject("word", word)
 		if (signedInStatus(req))
 			mnv.addObject("proficiency", userWord?.proficiency ?: 0)
 		return mnv
@@ -54,14 +53,14 @@ class WordPlayController(
 		return userWordService.findNextUserWord(userId, wordBookId)
 	}
 
-	private fun findWord(wordId: Long?, wordBookId: Long): Word {
+	private fun findWord(wordId: Long?, wordBookId: Long): WordView {
 		if (wordId == null)
-			return Word(wordBookId, "error", "오류")
+			return WordView.error(wordBookId)
 		val word = wordService.findWordById(wordId)
 		return if (word != null)
-			word
+			WordView(word)
 		else
-			Word(wordBookId, "error", "오류")
+			WordView.error(wordBookId)
 	}
 
 	private fun increaseProficiency(wordId: Long, wordBookId: Long, req: HttpServletRequest) {
@@ -73,8 +72,8 @@ class WordPlayController(
 	private fun signedInStatus(req: HttpServletRequest) = userSessionManager.currentUserId(req) != null
 }
 
-private fun ModelAndView.setWord(word: Word) {
-	this.addObject("wordId", word.id)
+private fun ModelAndView.setWord(word: WordView) {
+	this.addObject("wordId", word.wordId)
 	this.addObject("eng", word.eng)
 	this.addObject("hint", word.getHint())
 	this.addObject("kor", word.kor)

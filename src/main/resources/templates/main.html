@@ -7,9 +7,22 @@
 <title>Word Play</title>
 <style>
     button {
-      font-size: 1.2em;
+      width:240px;
+      height:280px;
     }
-    .pause {
+    button.pause {
+      background: url('images/stop.png') no-repeat;
+      background-size: contain;
+    }
+    button.paused {
+      background: url('images/go.png') no-repeat;
+      background-size: contain;
+    }
+    button.gotit {
+      background: url('images/gotit.png') no-repeat;
+      background-size: contain;
+    }
+    .paused {
         display: none;
     }
     div.eng{
@@ -21,13 +34,13 @@
 
 </style>
 
-<link rel="stylesheet" type="text/css" href="/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
 
-var wordBookId = [[${wordBookId}]];
+var wordBookId = [[${word.wordBookId}]];
 
 $( function() {
 
@@ -72,11 +85,14 @@ function goToNext(){
 function pauseButtonClicked(){
 	if(doGoNext){
 		doGoNext = false;
-		$("button#pauseButton").text("CONTINUE")
-		$(".pause").show()
+		$("button.pause").addClass("paused")
+		$("button.paused").removeClass("pause")
+		$(".paused").show()
 	} else {
 		doGoNext = true;
-		$(".pause").hide()
+		$("button.paused").addClass("pause")
+		$("button.pause").addClass("paused")
+		$(".paused").hide()
 		goToNext();
 	}
 }
@@ -89,36 +105,51 @@ function gotItButtonClicked(){
 </script>
 </head>
 <body>
+
 <div class="top-button-bar">
-    <span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
-    <span th:text="${{userSignId}}">userSignId</span>
-    <span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
+	<table width="100%">
+		<tr>
+			<td style="text-align: right">
+				<span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
+				<span th:text="${{userSignId}}">userSignId</span>
+				<span th:if="${userSignedIn}"><a href="/signOut">SIGN OUT</a></span>
+			</td>
+		</tr>
+	</table>
 </div>
+
 <div class="body">
 	<div class="eng">
-		<span th:text="${{hint}}" class="hint">h</span>
-		<span th:text="${{eng}}" class="answer">happy</span>
+		<span th:text="${word.hint}" class="hint">h</span>
+		<span th:text="${word.eng}" class="answer">happy</span>
 	</div>
-	<div th:text="${{kor}}" class="kor">행복한</div>
-	<div class="bottom-button-bar">
-		<table width="100%">
-			<tr>
-				<td style="text-align: left">
-					<span>Proficiency: </span>
-					<span th:text="${proficiency}">Proficiency: 99</span>
-					<span class="pause"><a href="/word-books">다른 단어장</a></span>
-				</td>
-				<td style="text-align: right">
-					<button id="pauseButton" onclick="pauseButtonClicked()">PAUSE</button>
-					<button class="gotit" onclick="gotItButtonClicked()">GOT IT</button>
-				</td>
-			</tr>
-		</table>
-	</div>
+	<div th:text="${word.kor}" class="kor">행복한</div>
 </div>
+
+<div class="bottom-button-bar">
+	<table width="100%">
+		<tr>
+			<td style="text-align: left">
+				<span>&nbsp;</span>
+				<span th:text="${proficiency}">99</span>
+				<span class="paused"><a href="/word-books">다른 단어장</a></span>
+			</td>
+			<td style="text-align: right">
+				<button class="pause" onclick="pauseButtonClicked()"></button>
+				<button class="gotit" onclick="gotItButtonClicked()"></button>
+			</td>
+		</tr>
+	</table>
+</div>
+
 <form id="gotit" method="post">
-	<input type="hidden" name="wordBookId" th:value="${wordBookId}"/>
-	<input type="hidden" name="wordId" th:value="${wordId}"/>
+	<input type="hidden" name="wordBookId" th:value="${word.wordBookId}"/>
+	<input type="hidden" name="wordId" th:value="${word.wordId}"/>
 </form>
+
+<audio controls autoplay>
+	<source th:src="@{/sound(wordId=${word.wordId})}" type="audio/mpeg">
+</audio>
+
 </body>
 </html>

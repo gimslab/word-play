@@ -33,7 +33,6 @@ class WordPlayController(
 		val mnv = ModelAndView("main")
 		setUserInfo(req, userSessionManager, mnv)
 		mnv.addObject("wordBookId", wordBookId)
-//		mnv.setWord(word)
 		mnv.addObject("word", word)
 		if (signedInStatus(req))
 			mnv.addObject("proficiency", userWord?.proficiency ?: 0)
@@ -72,10 +71,4 @@ class WordPlayController(
 	private fun signedInStatus(req: HttpServletRequest) = userSessionManager.currentUserId(req) != null
 }
 
-private fun ModelAndView.setWord(word: WordView) {
-	this.addObject("wordId", word.wordId)
-	this.addObject("eng", word.eng)
-	this.addObject("hint", word.getHint())
-	this.addObject("kor", word.kor)
-}
 

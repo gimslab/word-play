@@ -1,6 +1,7 @@
 package com.gimslab.wordplay.service.wordbook
 
 import java.time.ZonedDateTime
+import java.time.ZonedDateTime.now
 import javax.persistence.*
 
 @Table(name = "word_book")
@@ -10,8 +11,9 @@ class WordBook(
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		var id: Long?,
 		val title: String,
-		val createdTime: ZonedDateTime
+		val createdAt: ZonedDateTime,
+		var modifiedAt: ZonedDateTime
 ) {
-	constructor(title: String) : this(0, title, ZonedDateTime.now())
+	constructor(title: String) : this(0, title, now(), now())
 }
 

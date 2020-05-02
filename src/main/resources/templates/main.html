@@ -10,16 +10,28 @@
       width:240px;
       height:280px;
     }
-    button.pause {
-      background: url('images/stop.png') no-repeat;
+    img.star {
+        width: 40px;
+        content: url('/images/star-empty.png');
+    }
+    img.star-light {
+        width: 60px;
+		content: url('/images/star-light.png');
+    }
+    button#btnGotoWordBooks {
+      background: url('/images/word-books.png') no-repeat;
       background-size: contain;
     }
-    button.paused {
-      background: url('images/go.png') no-repeat;
+    button#btnPause.pause {
+      background: url('/images/stop.png') no-repeat;
       background-size: contain;
     }
-    button.gotit {
-      background: url('images/gotit.png') no-repeat;
+    button#btnPause.paused {
+      background: url('/images/go.png') no-repeat;
+      background-size: contain;
+    }
+    button#btnGotIt {
+      background: url('/images/gotit.png') no-repeat;
       background-size: contain;
     }
     .paused {
@@ -41,13 +53,23 @@
 <script>
 
 var wordBookId = [[${word.wordBookId}]];
+var starCount = [[${proficiency}]];
 
 $( function() {
 
     function initDisplay(){
-      $("div.eng span").hide()
-      $(".answer").hide()
-      window.setTimeout(showHint, 1000)
+		$("div.eng span").hide()
+		$(".answer").hide()
+
+		var stars = $("img.star")
+		for(var i=0; i<starCount; i++){
+			if(stars.length>i){
+				$(stars[i]).removeClass("star");
+				$(stars[i]).addClass("star-light");
+			}
+		}
+
+		window.setTimeout(showHint, 1000)
     };
 
     function showHint(){
@@ -82,23 +104,28 @@ function goToNext(){
 		window.location.href="/word-play?wordBookId="+wordBookId;
 }
 
-function pauseButtonClicked(){
+function btnPauseClicked(){
 	if(doGoNext){
 		doGoNext = false;
-		$("button.pause").addClass("paused")
-		$("button.paused").removeClass("pause")
+		$("button#btnPause").addClass("paused")
+		$("button#btnPause").removeClass("pause")
 		$(".paused").show()
+		$("button.gotit").hide()
 	} else {
 		doGoNext = true;
-		$("button.paused").addClass("pause")
-		$("button.pause").addClass("paused")
+		$("button#btnPause").addClass("pause")
+		$("button#btnPause").removeClass("paused")
 		$(".paused").hide()
 		goToNext();
 	}
 }
 
-function gotItButtonClicked(){
-    pauseButtonClicked();
+function btnGotoWordBooksClicked(){
+	location.href="/word-books"
+}
+
+function btnGotItClicked(){
+    btnPauseClicked();
     $("form#gotit").submit();
 }
 
@@ -130,13 +157,19 @@ function gotItButtonClicked(){
 	<table width="100%">
 		<tr>
 			<td style="text-align: left">
-				<span>&nbsp;</span>
+				<span id="spanStars">
+					<img class="star"/>
+					<img class="star"/>
+					<img class="star"/>
+					<img class="star"/>
+					<img class="star"/>
+				</span>
 				<span th:text="${proficiency}">99</span>
-				<span class="paused"><a href="/word-books">다른 단어장</a></span>
 			</td>
 			<td style="text-align: right">
-				<button class="pause" onclick="pauseButtonClicked()"></button>
-				<button class="gotit" onclick="gotItButtonClicked()"></button>
+				<button class="paused" id="btnGotoWordBooks" onclick="btnGotoWordBooksClicked()"></button>
+				<button class="pause" id="btnPause" onclick="btnPauseClicked()"></button>
+				<button class="gotit" id="btnGotIt" onclick="btnGotItClicked()"></button>
 			</td>
 		</tr>
 	</table>

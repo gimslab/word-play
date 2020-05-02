@@ -21,16 +21,18 @@
     var x = $("input[name='signId']").val()
     var fixed = x.replace(/[^a-zA-Z]/g,"").toLowerCase()
     $("input[name='signId']").val(fixed)
+    var disabled = $("input[name='signId']").val().length < 3
+	$("input#signInButton").attr("disabled", disabled);
   }
 </script>
 </head>
 <body>
 <form method="post">
-	<span>USER ID: *알파벳 소문자만 가능</span>
+	<span>USER ID: *알파벳 소문자 3자 이상</span>
 	<span>
-		<input type="text" name="signId" class="sign-id" onkeyup="validateUserId()" onblur="validateUserId()"/>
+		<input type="text" name="signId" class="sign-id" onkeyup="validateUserId()"/>
 	</span>
-<input type="submit" value="SIGN IN"/>
+<input type="submit" id="signInButton" value="SIGN IN" disabled="disabled"/>
 </form>
 </body>
 </html>

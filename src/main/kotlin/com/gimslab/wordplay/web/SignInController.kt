@@ -40,8 +40,8 @@ class SignInController(
 
 	private fun validate(signId: String) {
 		val lowers = signId.replace(REGEX_FOR_USERID, "")
-		if (signId != lowers)
-			throw IllegalArgumentException("영문 소문자만 가능합니다.")
+		if (signId != lowers || signId.length<4)
+			throw IllegalArgumentException("영문 소문자 3글자 이상만 가능합니다.")
 	}
 }
 

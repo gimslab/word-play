@@ -10,11 +10,13 @@ class User(
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		var id: Long?,
 		val signId: String,
-		val createdTime: ZonedDateTime
+		val createdAt: ZonedDateTime,
+		val modifiedAt: ZonedDateTime,
+		val deleted: Boolean
 ) {
 	companion object {
 		fun of(signId: String): User {
-			return User(null, signId, ZonedDateTime.now())
+			return User(null, signId, ZonedDateTime.now(), ZonedDateTime.now(), false)
 		}
 	}
 }

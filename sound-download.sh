@@ -18,7 +18,7 @@ mainUrl=https://www.wordreference.com
 page="${mainUrl}/enko/$word"
 uri=$(http $page | grep '<audio' | sed 's/<source/\n/g' | grep src | head -1 | sed -e "s/^.*src='//" -e "s/' .*$//")
 if [ "$uri" = "" ]; then
-	echo error
+	echo error $word
 	exit
 fi
 

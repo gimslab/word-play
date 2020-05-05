@@ -10,7 +10,7 @@ class WordService(
 		val userWordRepository: UserWordRepository
 ) {
 	fun increaseProficiency(userId: Long, wordBookId: Long, wordId: Long) {
-		var userWord = userWordRepository.findByUserIdAndWordId(userId, wordId)
+		var userWord = userWordRepository.findByUserIdAndWordBookIdAndWordId(userId, wordBookId, wordId)
 		if (userWord != null)
 			userWord.increaseProficiency()
 		else

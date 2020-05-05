@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserWordJpaRepository : UserWordRepository, JpaRepository<UserWord, Long> {
-	override fun findByUserIdAndWordId(userId: Long, wordId: Long): UserWord?
 }

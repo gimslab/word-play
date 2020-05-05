@@ -11,7 +11,7 @@ class UserWordService(
 		private val random: Random = Random(System.currentTimeMillis())
 ) {
 	fun findNextUserWord(userId: Long?, wordBookId: Long): UserWord? {
-		val founds = userWordRepository.findTop8ByUserIdAndWordBookIdOrderByProficiencyAsc(userId ?: 0, wordBookId)
+		val founds = userWordRepository.findTop8ByUserIdAndWordBookIdOrderByProficiencyAscModifiedAtAsc(userId ?: 0, wordBookId)
 		return founds.get(random.nextInt(founds.size))
 	}
 }

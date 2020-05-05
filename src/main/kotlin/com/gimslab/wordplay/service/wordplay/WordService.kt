@@ -7,14 +7,14 @@ class WordService(
 		val wordRepository: WordRepository,
 		val userWordRepository: UserWordRepository
 ) {
-	fun increaseProficiency(userId: Long, wordBookId: Long, wordId: Long) {
-		val userWords = userWordRepository.findByUserIdAndWordId(userId, wordId)
-		val userWord = if (userWords.isNotEmpty()) {
-			userWords[0].increaseProficiency()
-			userWords[0]
-		} else {
-			UserWord(userId, wordBookId, wordId)
-		}
+	fun increaseProficiency(userId: Long, wordBookId: Long, wordId: Long, userWordId: Long) {
+		val userWordFound = userWordRepository.getOne(userWordId)
+		val userWord =
+				if (userWordFound.userId == userId)
+					userWordFound
+				else
+					UserWord(userId, wordBookId, wordId)
+		userWord.increaseProficiency()
 		userWordRepository.save(userWord)
 	}
 

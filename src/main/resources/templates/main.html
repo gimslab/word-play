@@ -10,6 +10,9 @@
       width:240px;
       height:280px;
     }
+    .word-book-title {
+        font-size:.6em;
+    }
     img.star {
         width: 40px;
         content: url('/images/star-empty.png');
@@ -136,6 +139,9 @@ function btnGotItClicked(){
 <div class="top-button-bar">
 	<table width="100%">
 		<tr>
+			<td>
+				<span th:text="${wordBookTitle}" class="word-book-title">Word Book Title</span>
+			</td>
 			<td style="text-align: right">
 				<span th:unless="${userSignedIn}"><a href="/signin">SIGN IN</a></span>
 				<span th:text="${{userSignId}}">userSignId</span>
@@ -178,6 +184,7 @@ function btnGotItClicked(){
 <form id="gotit" method="post">
 	<input type="hidden" name="wordBookId" th:value="${word.wordBookId}"/>
 	<input type="hidden" name="wordId" th:value="${word.wordId}"/>
+	<input type="hidden" name="userWordId" th:value="${userWordId}"/>
 </form>
 
 <audio controls autoplay>

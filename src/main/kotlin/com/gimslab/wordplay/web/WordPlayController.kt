@@ -1,6 +1,7 @@
 package com.gimslab.wordplay.web
 
 import com.gimslab.wordplay.service.userwordbook.UserWordService
+import com.gimslab.wordplay.service.wordbook.WordBookService
 import com.gimslab.wordplay.service.wordplay.UserWord
 import com.gimslab.wordplay.service.wordplay.WordService
 import com.gimslab.wordplay.util.ReadabilityHelper.Companion.not
@@ -18,7 +19,8 @@ import javax.servlet.http.HttpServletResponse
 class WordPlayController(
 		private val wordService: WordService,
 		private val userSessionManager: UserSessionManager,
-		private val userWordService: UserWordService
+		private val userWordService: UserWordService,
+		private val wordBookService: WordBookService
 ) {
 
 	@GetMapping
@@ -34,21 +36,25 @@ class WordPlayController(
 		setUserInfo(req, userSessionManager, mnv)
 		mnv.addObject("wordBookId", wordBookId)
 		mnv.addObject("word", word)
-		if (signedInStatus(req))
-			mnv.addObject("proficiency", userWord?.proficiency ?: 0)
+		mnv.addObject("wordBookTitle", findWordBookTitle(wordBookId))
+		mnv.addObject("userWordId", userWord?.id ?: 0)
+		mnv.addObject("proficiency", userWord?.proficiency ?: 0)
 		return mnv
 	}
 
+	private fun findWordBookTitle(wordBookId: Long) =
+			wordBookService.findCachedWordBookTitleById(wordBookId)
+
 	@PostMapping
-	fun post(wordId: Long, wordBookId: Long, req: HttpServletRequest): String {
+	fun post(wordId: Long, wordBookId: Long, userWordId: Long, req: HttpServletRequest): String {
 		if (not(signedInStatus(req)))
 			return "redirect:/signin"
-		increaseProficiency(wordId, wordBookId, req)
+		increaseProficiency(wordId, wordBookId, userWordId, req)
 		return "redirect:/word-play?wordBookId=$wordBookId"
 	}
 
 	private fun findNextUserWord(wordBookId: Long, req: HttpServletRequest): UserWord? {
-		val userId = userSessionManager.currentUserId(req)
+		val userId = currentUserId(req)
 		return userWordService.findNextUserWord(userId, wordBookId)
 	}
 
@@ -62,13 +68,16 @@ class WordPlayController(
 			WordView.error(wordBookId)
 	}
 
-	private fun increaseProficiency(wordId: Long, wordBookId: Long, req: HttpServletRequest) {
-		val userId = userSessionManager.currentUserId(req)
+	private fun increaseProficiency(wordId: Long, wordBookId: Long, userWordId: Long, req: HttpServletRequest) {
+		val userId = currentUserId(req)
 		if (userId != null)
-			wordService.increaseProficiency(userId, wordBookId, wordId)
+			wordService.increaseProficiency(userId, wordBookId, wordId, userWordId)
 	}
 
-	private fun signedInStatus(req: HttpServletRequest) = userSessionManager.currentUserId(req) != null
+	private fun signedInStatus(req: HttpServletRequest) = currentUserId(req) != null
+
+	private fun currentUserId(req: HttpServletRequest) =
+			userSessionManager.currentUserId(req)
 }
 
 

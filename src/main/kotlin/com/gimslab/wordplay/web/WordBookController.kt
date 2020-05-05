@@ -22,7 +22,7 @@ class WordBookController(
 		// TODO move to interceptor
 		userSessionManager.makeSessionFromCookie(req, resp)
 
-		val wordBooks = wordBookService.list()
+		val wordBooks = wordBookService.findAllWordBooks()
 
 		val mnv = ModelAndView("word-books")
 		setUserInfo(req, userSessionManager, mnv)

@@ -1,10 +1,9 @@
 package com.gimslab.wordplay.service.wordplay
 
 interface UserWordRepository {
+	fun getOne(id: Long): UserWord
 	fun findByUserIdAndWordBookId(userId: Long, wordBookId: Long): List<UserWord>
 	fun save(userWord: UserWord): UserWord
-	fun findByUserIdAndWordId(userId: Long, wordId: Long): List<UserWord>
-	fun findByUserIdAndWordBookIdAndWordId(userId: Long, wordBookId: Long, wordId: Long): UserWord?
-	fun findTop8ByUserIdAndWordBookIdOrderByProficiencyAsc(userId: Long, wordBookId: Long): List<UserWord>
+	fun findTop8ByUserIdAndWordBookIdOrderByProficiencyAscModifiedAtAsc(userId: Long, wordBookId: Long): List<UserWord>
 }
 

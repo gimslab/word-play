@@ -39,6 +39,15 @@ create table if not exists word_book (
 	createdAt timestamp,
 	modifiedAt timestamp,
 	primary key(id)
+);
+
+drop table if exists user_word_book;
+create table if not exists user_word_book (
+	id bigint not null AUTO_INCREMENT,
+	userId bigint,
+	wordBookId bigint,
+	wordBookTitle varchar(255),
+	createdAt timestamp,
+	modifiedAt timestamp,
+	primary key(id)
 )
-
-

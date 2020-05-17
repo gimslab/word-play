@@ -1,5 +1,7 @@
 package com.gimslab.wordplay.service.userwordbook
 
+import com.gimslab.wordplay.service.wordbook.WordBook
+import com.gimslab.wordplay.service.wordbook.WordBookRepository
 import com.gimslab.wordplay.service.wordplay.UserWord
 import com.gimslab.wordplay.service.wordplay.UserWordRepository
 import com.gimslab.wordplay.service.wordplay.Word
@@ -10,9 +12,32 @@ import org.springframework.stereotype.Service
 @Service
 class UserWordBookService(
 		private val wordRepository: WordRepository,
-		private val userWordRepository: UserWordRepository
+		private val userWordRepository: UserWordRepository,
+		private val userWordBookRepository: UserWordBookRepository,
+		private val wordBookRepository: WordBookRepository
 ) {
 	fun prepareUserWordbook(userId: Long, wordBookId: Long) {
+
+		updateUserWordBook(userId, wordBookId)
+
+		prepareUserWords(userId, wordBookId)
+	}
+
+	private fun updateUserWordBook(userId: Long, wordBookId: Long) {
+		val userWordBook = findUserWordBookBy(userId, wordBookId)
+		if (userWordBook != null) {
+			userWordBook.updateModifiedAt()
+		} else {
+			val wordBook = findWordBookBy(wordBookId)
+			val newUserWordBook = UserWordBook(userId, wordBook)
+			userWordBookRepository.save(newUserWordBook)
+		}
+	}
+
+	private fun findWordBookBy(wordBookId: Long) =
+			wordBookRepository.getOne(wordBookId)
+
+	private fun prepareUserWords(userId: Long, wordBookId: Long) {
 		val words = findWordsFromWordBook(wordBookId)
 		val userWords = findUserWordsBy(userId, wordBookId)
 		val userWordNos = userWords.map { it.wordId }.toSet()
@@ -28,5 +53,9 @@ class UserWordBookService(
 
 	private fun findUserWordsBy(userId: Long, wordBookId: Long): List<UserWord> {
 		return userWordRepository.findByUserIdAndWordBookId(userId, wordBookId)
+	}
+
+	private fun findUserWordBookBy(userId: Long, wordBookId: Long): UserWordBook? {
+		return userWordBookRepository.findByUserIdAndWordBookId(userId, wordBookId)
 	}
 }

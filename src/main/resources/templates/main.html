@@ -156,6 +156,11 @@ function btnGotItClicked(){
 		<span th:text="${word.hint}" class="hint">h</span>
 		<span th:text="${word.eng}" class="answer">happy</span>
 	</div>
+	<div class="paused">
+		<span>
+			<a th:href="@{https://dic.daum.net/search.do(q=${word.eng})}" target="_blank">다음사전</a>
+		</span>
+	</div>
 	<div th:text="${word.kor}" class="kor">행복한</div>
 </div>
 

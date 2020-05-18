@@ -8,6 +8,7 @@ import com.gimslab.wordplay.service.wordplay.Word
 import com.gimslab.wordplay.service.wordplay.WordRepository
 import com.gimslab.wordplay.util.ReadabilityHelper.Companion.not
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserWordBookService(
@@ -16,6 +17,7 @@ class UserWordBookService(
 		private val userWordBookRepository: UserWordBookRepository,
 		private val wordBookRepository: WordBookRepository
 ) {
+	@Transactional(readOnly = false)
 	fun prepareUserWordbook(userId: Long, wordBookId: Long) {
 
 		updateUserWordBook(userId, wordBookId)

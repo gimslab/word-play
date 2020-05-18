@@ -14,15 +14,22 @@ class UserWordBook(
 		val userId: Long,
 		var wordBookId: Long,
 		val wordBookTitle: String,
+		var proficiency: Int?,
 		val createdAt: ZonedDateTime,
 		var modifiedAt: ZonedDateTime
 ) {
 	constructor(userId: Long, wordBook: WordBook) : this(id = null,
 			userId = userId, wordBookId = wordBook.id!!,
-			wordBookTitle = wordBook.title, createdAt = now(), modifiedAt = now())
+			wordBookTitle = wordBook.title, proficiency = 0,
+			createdAt = now(), modifiedAt = now())
 
 	fun updateModifiedAt() {
-		modifiedAt = now()
+		this.modifiedAt = now()
+	}
+
+	fun updateProficiency(proficiency: Int) {
+		this.proficiency = proficiency
+		this.modifiedAt = now()
 	}
 }
 

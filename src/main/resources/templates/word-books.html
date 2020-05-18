@@ -44,7 +44,8 @@ $( function() {
 			<td>
 				<a th:href="@{/user-word-book(wordBookId=${wordBook.id})}"><span th:text="${wordBook.title}"></span></a>
 			</td>
-			<td th:text="${wordBook.modifiedAt}"></td>
+			<td th:text="${wordBook.proficiency}">average proficiency</td>
+			<td th:text="${wordBook.modifiedAtStr}"></td>
 		</tr>
 		</tbody>
 	</table>

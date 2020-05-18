@@ -47,6 +47,7 @@ create table if not exists user_word_book (
 	userId bigint,
 	wordBookId bigint,
 	wordBookTitle varchar(255),
+	proficiency int,
 	createdAt timestamp,
 	modifiedAt timestamp,
 	primary key(id)
